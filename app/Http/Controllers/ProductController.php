@@ -271,4 +271,84 @@ public function vendordelete($id){
     return redirect()->route('products.admin-index')->with('success','product deleted successfully!');
 }
 
+//CART
+
+// 1.view cart
+public function ProductCart(){
+    $products=DB::table('products')->get();
+
+    return view('products.cart',compact('products'));
+    
 }
+
+//2.add Product To cart
+public function addProductToCart(Request $request){
+    $product_id=$request->input('product_id');
+    $quantity = $request->input('quantity', 1);
+    $cartItemId = $request->input('cart_item_id');
+
+    $product=product::findOrFail($product_id);
+
+    if(!$product){
+        return response()->json(['error'=>'Product is not found'],404);
+    }else{
+        //Initialize or retrieve the cart array using session
+        $cart = session()->get('cart', []);
+        
+        if(isset($cart[$product_id])){
+             // Update quantity if product is already in the cart
+            $cart[$product_id]['quantity'] += $quantity;
+            
+
+
+
+        }else{
+            //if the product is not in the cart ADD IT
+            $cart[$product_id]=[
+                'id'=>$product->id,
+                'name'=>$product->name,
+                'price'=>$product->price,
+                'image'=>$product->image,
+                'quantity'=>$quantity
+
+
+                
+
+            ];
+            session()->put('cart', $cart);
+
+
+            //calculate the total 
+            $totalQuantity=0;
+            foreach($cart as $item){
+                $totalQuantity+=$item['quantity'];
+            }
+            return response()->json(['message' => 'Cart updated', 'cartCount' => $totalQuantity], 200);
+
+
+        }
+
+
+
+    }
+
+
+
+}
+
+
+//delete item from cart
+public function deleteItem(Request $request){
+    if($request->id){
+        $cart = session()->get('cart');
+        if(isset($cart[$request->id])) {
+            unset($cart[$request->id]);
+            session()->put('cart', $cart);
+        }
+        session()->flash('success', 'Product successfully deleted.');
+
+
+    }
+}
+}
+

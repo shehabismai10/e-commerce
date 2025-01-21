@@ -78,15 +78,17 @@ Route::prefix('vendor')->middleware(['auth','verified','rolemanager:vendor'])->g
 
 });
 
-Route::get('/products-list', [ShoppingCart::class, 'index']); // List all products
 
-Route::get('/cart-list', [ShoppingCart::class, 'ProductCart']); // List all products
+/*Route::get('/cart-list', [ShoppingCart::class, 'ProductCart']); // List all products
 
 Route::get('/add-to-cart', [ShoppingCart::class, 'addProductToCart'])->name('add-product-to-shopping-cart'); // List all products
 
-Route::delete('/delete-cart-item',[ShoppingCart::class, 'deleteItem'])->name('delete.cart.item');
+Route::delete('/delete-cart-item',[ShoppingCart::class, 'deleteItem'])->name('delete.cart.item');*/
 
 
 
-
+Route::get('/products-list', [ProductController::class, 'userindex']);
+Route::get('/cart-list', [ProductController::class, 'ProductCart']);
+Route::post('add-to-cart', [ProductController::class, 'addProductToCart'])->name('add-product-to-shopping-cart');
+Route::delete('/delete-cart-item', [ProductController::class, 'deleteItem'])->name('delete.cart.item');
 require __DIR__.'/auth.php';
