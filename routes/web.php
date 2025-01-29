@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 
 use App\Http\Controllers\ProfileController;
@@ -89,6 +90,23 @@ Route::delete('/delete-cart-item',[ShoppingCart::class, 'deleteItem'])->name('de
 
 Route::get('/products-list', [ProductController::class, 'userindex']);
 Route::get('/cart-list', [ProductController::class, 'ProductCart']);
+
+
+Route::post('/stripe', [PaymentController::class, 'StripePost'])->name('stripe.post');
+Route::get('/stripe-view', [PaymentController::class, 'Stripe']);
+Route::get('/success', [PaymentController::class, 'success'])->name('success');
+
+
+
+
+
+
 Route::post('add-to-cart', [ProductController::class, 'addProductToCart'])->name('add-product-to-shopping-cart');
 Route::delete('/delete-cart-item', [ProductController::class, 'deleteItem'])->name('delete.cart.item');
+
+// Route::get('/paypal-success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
+// Route::get('/paypal-cancel', [PaymentController::class, 'paypalCancel'])->name('paypal.cancel');
+
+
+
 require __DIR__.'/auth.php';

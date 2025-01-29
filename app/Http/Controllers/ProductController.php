@@ -324,6 +324,7 @@ public function addProductToCart(Request $request){
                 $totalQuantity+=$item['quantity'];
             }
             return response()->json(['message' => 'Cart updated', 'cartCount' => $totalQuantity], 200);
+            
 
 
         }
